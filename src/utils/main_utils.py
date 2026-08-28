@@ -1,5 +1,6 @@
 import sys
 import yaml
+import os
 
 from src.constant.training_pipeline import SCHEMA_FILE_PATH
 from src.exception import CustomerException
@@ -24,3 +25,14 @@ class MainUtils:
 
         except Exception as e:
             raise CustomerException(e, sys) from e
+
+    def write_yaml_file(self, file_path: str, content: object, replace: bool = False) -> None:
+        try:
+            if replace:
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            with open(file_path, "w") as file:
+                yaml.dump(content, file)
+        except Exception as e:
+            raise CustomerException(e, sys)
