@@ -12,7 +12,7 @@ class CustomerData:
         try:
             self.mongo_client = MongoDBClient(database_name= DATABASE_NAME)
         except Exception as e:
-            raise CustomerException(e, sys)
+            raise CustomerException(e, sys) from e
 
     def export_collection_as_dataframe(
         self, collection_name : str, database_name : Optional[str] = None
@@ -29,4 +29,4 @@ class CustomerData:
             df.replace({"na": np.nan}, inplace=True)
             return df
         except Exception as e:
-            raise CustomerException(e, sys)
+            raise CustomerException(e, sys) from e

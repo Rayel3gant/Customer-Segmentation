@@ -85,7 +85,7 @@ class DataValidation:
             status = expected_columns == actual_columns
             return status
         except Exception as e:
-            raise CustomerException(e , sys)
+            raise CustomerException(e , sys) from e
 
     def validate_dataset_schema_columns(
         self,
@@ -100,14 +100,14 @@ class DataValidation:
 
             return train_schema_status, test_schema_status
         except Exception as e:
-            raise CustomerException(e, sys)
+            raise CustomerException(e, sys) from e
 
     @staticmethod
     def read_data(file_path :str) -> DataFrame:
         try:
             return pd.read_csv(file_path)
         except Exception as e:
-            raise CustomerException(e, sys)
+            raise CustomerException(e, sys) from e
         
     def initiate_data_validation(self) -> DataValidationArtifact:
         logging.info("Starting DataValidation.initiate_data_validation")
@@ -150,4 +150,4 @@ class DataValidation:
             logging.info("Exiting DataValidation.initiate_data_validation")
             return data_validation_artifact
         except Exception as e:
-            raise CustomerException(e, sys)
+            raise CustomerException(e, sys) from e

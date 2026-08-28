@@ -24,7 +24,7 @@ class TrainPipeline:
 
             return data_ingestion_artifact
         except Exception as e:
-            raise CustomerException(e, sys)
+            raise CustomerException(e, sys) from e
 
     def start_data_validation(self, data_ingestion_artifact: DataIngestionArtifact) -> DataValidationArtifact:
         logging.info("Starting TrainPipeline.start_data_validation")
@@ -38,7 +38,7 @@ class TrainPipeline:
 
             logging.info("Exiting TrainPipeline.start_data_validation")
         except Exception as e:
-            raise CustomerException(e, sys)
+            raise CustomerException(e, sys) from e
 
     def run_pipeline(self) -> None :
         logging.info("Starting TrainPipeline.run_pipeline")
@@ -50,5 +50,5 @@ class TrainPipeline:
             )
             
         except Exception as e:
-            raise CustomerException(e, sys)
+            raise CustomerException(e, sys) from e
         
