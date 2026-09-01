@@ -1,6 +1,8 @@
 import sys
 import yaml
 import os
+import pickle
+import numpy as np
 
 from src.constant.training_pipeline import SCHEMA_FILE_PATH
 from src.exception import CustomerException
@@ -50,5 +52,27 @@ class MainUtils:
                     sort_keys=False
                 )
 
+        except Exception as e:
+            raise CustomerException(e, sys) from e
+
+    @staticmethod
+    def save_object(file_path: str, object: object) -> None:
+        try:
+            with open(file_path, 'wb') as file_obj:
+                pickle.dump(object, file_obj)
+
+        except Exception as e:
+            raise CustomerException(e, sys) from e
+
+    def save_numpy_array_data(
+        self,
+        file_path: str,
+        array: np.array
+    ):
+        try:
+            dir_path = os.path.dirname(file_path)
+            os.makedirs(dir_path, exist_ok= True)
+            with open(file_path, 'wb') as file_obj:
+                np.save(file_obj, array)
         except Exception as e:
             raise CustomerException(e, sys) from e
