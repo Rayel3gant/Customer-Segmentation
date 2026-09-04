@@ -1,13 +1,14 @@
 import sys
 
-from src.entity.config_entity import DataIngestionConfig,DataValidationConfig, DataTransformationConfig, ModelTrainerConfig
-from src.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact , DataTransformationArtifact, ModelTrainerArtifact
+from src.entity.config_entity import DataIngestionConfig,DataValidationConfig, DataTransformationConfig, ModelTrainerConfig, ModelEvaluationConfig
+from src.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact , DataTransformationArtifact, ModelTrainerArtifact, ModelEvaluationArtifact
 from src.logger import logging
 from src.components.data_ingestion import DataIngestion
 from src.exception import CustomerException
 from src.components.data_validation import DataValidation
 from src.components.data_transformation import DataTransformation
 from src.components.model_trainer import ModelTrainer
+from src.components.model_evaluation import ModelEvaluation
 
 class TrainPipeline:
     def __init__(self):
@@ -15,6 +16,7 @@ class TrainPipeline:
         self.data_validation_config = DataValidationConfig()
         self.data_transformation_config = DataTransformationConfig()
         self.model_trainer_config = ModelTrainerConfig()
+        self.model_evaluation_config = ModelEvaluationConfig()
 
     def start_data_ingestion(self) -> DataIngestionArtifact:
         logging.info("Starting TrainPipeline.start_data_ingestion") 
@@ -78,6 +80,28 @@ class TrainPipeline:
         except Exception as e:
             raise CustomerException(e, sys) from e
 
+    def start_model_evaluation(
+        self,
+        data_ingestion_artifact: DataIngestionArtifact,
+        data_transformation_artifact: DataTransformationArtifact,
+        model_trainer_artifact: ModelTrainerArtifact
+    ) -> ModelEvaluationArtifact:
+        try:
+            logging.info("Starting TrainPipeline.start_model_evaluation")
+            model_evaluation = ModelEvaluation(
+                model_evaluation_config= self.model_evaluation_config,
+                data_ingestion_artifact= data_ingestion_artifact,
+                data_transformation_artifact= data_transformation_artifact,
+                model_trainer_artifact= model_trainer_artifact              
+            )
+
+            model_evaluation_artifact = model_evaluation.initiate_model_evaluation()
+            logging.info("Exiting TrainPipeline.start_model_evaluation")
+            return model_evaluation_artifact
+
+        except Exception as e:
+            raise CustomerException(e, sys) from e
+
     def run_pipeline(self) -> None :
         logging.info("Starting TrainPipeline.run_pipeline")
         try:
@@ -94,6 +118,12 @@ class TrainPipeline:
 
             model_trainer_artifact = self.start_model_trainer(
                 data_transformation_artifact= data_transformation_artifact
+            )
+
+            model_evaluation_artifact= self.start_model_evaluation(
+                data_ingestion_artifact= data_ingestion_artifact,
+                data_transformation_artifact= data_transformation_artifact,
+                model_trainer_artifact= model_trainer_artifact
             )
             logging.info("Model Trained Successfully.")
         except Exception as e:

@@ -1,4 +1,5 @@
 import os
+from src.constant.s3_bucket import TRAINING_BUCKET_NAME
 
 PIPELINE_NAME: str = "src"
 ARTIFACT_DIR: str = "artifact"
@@ -34,4 +35,7 @@ DATA_TRANSFORMATION_TRANSFORMED_OBJECT_DIR: str = "transformed_object"
 
 PREPROCSSING_OBJECT_FILE_NAME = "preprocessing.pkl"
 TARGET_COLUMN = "cluster"
+
 MODEL_FILE_NAME = "model.pkl"
+MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE: float = 0.02
+MODEL_PUSHER_BUCKET_NAME = TRAINING_BUCKET_NAME

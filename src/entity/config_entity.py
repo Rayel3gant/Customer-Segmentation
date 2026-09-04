@@ -2,7 +2,9 @@ import os
 from dataclasses import dataclass
 from datetime import datetime
 
+from src.utils.main_utils import MainUtils
 from src.constant.training_pipeline import *
+from src.constant.prediction_pipeline import PRED_SCHEMA_FILE_PATH
 
 TIMESTAMP: str = datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
 
@@ -55,6 +57,11 @@ class ModelTrainerConfig:
     expected_accuracy: float = MODEL_TRAINER_EXPECTED_SCORE
     model_config_file_path: str = MODEL_TRAINER_MODEL_CONFIG_FILE_PATH
 
+@dataclass
+class ModelEvaluationConfig:
+    changed_threshold_score: float = MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE
+    bucket_name: str = MODEL_PUSHER_BUCKET_NAME
+    s3_model_key_path: str = MODEL_FILE_NAME
 
 class SimpleImputerConfig:
     def __init__(self):
@@ -70,4 +77,12 @@ class PCAConfig:
         self.random_state = 51
 
     def get_pca_config(self):
+        return self.__dict__
+
+class Prediction_config:
+    def __init__(self):
+        utils = MainUtils()
+        self.prediction_schema = utils.read_yaml_file(PRED_SCHEMA_FILE_PATH)
+        
+    def get_prediction_schema(self):
         return self.__dict__
