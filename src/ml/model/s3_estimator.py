@@ -41,3 +41,18 @@ class CustomerClusterEstimator:
             return self.loaded_model.predict(dataframe)
         except Exception as e:
             raise CustomerException(e,sys)
+
+    def save_model(
+        self,
+        from_file,
+        remove:bool = False
+    ) -> None:
+        try:
+            self.s3.upload_file(
+                from_filename= from_file,
+                to_filename= self.model_path,
+                bucket_name= self.bucket_name,
+                remove= remove
+            )
+        except Exception as e:
+            raise CustomerException(e,sys)   

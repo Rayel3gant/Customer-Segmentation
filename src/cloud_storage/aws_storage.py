@@ -3,9 +3,11 @@ from mypy_boto3_s3.service_resource import Bucket
 from typing import Union , List
 from io import StringIO
 import pickle
+import os
 
 from src.configuration.aws_connection import S3Client
 from src.exception import CustomerException
+from src.logger import logging
 
 class S3BucketOperations:
     def __init__(self):
@@ -90,5 +92,31 @@ class S3BucketOperations:
             )
             model = pickle.loads(model_object)
             return model
+        except Exception as e:
+            raise CustomerException(e, sys) from e
+
+    def upload_file(
+        self,
+        from_filename: str,
+        to_filename: str,
+        bucket_name: str,
+        remove: bool = True
+    ): 
+        try:
+            logging.info(
+                f"Uploading {from_filename} file to {to_filename} file in {bucket_name} bucket"
+            )
+
+            self.s3_resource.meta.client.upload_file(
+                from_filename,
+                bucket_name,
+                to_filename
+            )
+
+            if remove is True:
+                os.remove(from_filename)
+
+            logging.info("File Uploaded to bucket.")
+
         except Exception as e:
             raise CustomerException(e, sys) from e

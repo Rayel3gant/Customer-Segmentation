@@ -63,6 +63,11 @@ class ModelEvaluationConfig:
     bucket_name: str = MODEL_PUSHER_BUCKET_NAME
     s3_model_key_path: str = MODEL_FILE_NAME
 
+@dataclass
+class ModelPusherConfig:
+    bucket_name: str = MODEL_PUSHER_BUCKET_NAME
+    s3_model_key_path: str = MODEL_FILE_NAME
+
 class SimpleImputerConfig:
     def __init__(self):
         self.strategy = "constant"
