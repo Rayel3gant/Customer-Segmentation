@@ -1,1 +1,1 @@
-TRAINING_BUCKET_NAME = "customer-segmentation-model"
+TRAINING_BUCKET_NAME = "customer-segmentation-model-0004"
