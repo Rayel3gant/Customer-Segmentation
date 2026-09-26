@@ -4,7 +4,7 @@ from datetime import datetime
 
 from src.utils.main_utils import MainUtils
 from src.constant.training_pipeline import *
-from src.constant.prediction_pipeline import PRED_SCHEMA_FILE_PATH
+from src.constant.prediction_pipeline import PRED_SCHEMA_FILE_PATH, PREDICTION_DATA_BUCKET, MODEL_BUCKET_NAME, PREDICTION_INPUT_FILE_NAME , PREDICTION_OUTPUT_FILE_NAME
 
 TIMESTAMP: str = datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
 
@@ -67,6 +67,14 @@ class ModelEvaluationConfig:
 class ModelPusherConfig:
     bucket_name: str = MODEL_PUSHER_BUCKET_NAME
     s3_model_key_path: str = MODEL_FILE_NAME
+
+@dataclass
+class PredictionPipelineConfig:
+    data_bucket_name: str = PREDICTION_DATA_BUCKET
+    data_file_path: str = PREDICTION_INPUT_FILE_NAME
+    model_file_name: str = MODEL_FILE_NAME
+    model_bucket_name: str = MODEL_BUCKET_NAME
+    output_file_name: str = PREDICTION_OUTPUT_FILE_NAME
 
 class SimpleImputerConfig:
     def __init__(self):

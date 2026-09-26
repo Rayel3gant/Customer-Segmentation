@@ -53,7 +53,6 @@ class S3BucketOperations:
 
     @staticmethod
     def read_object(
-        self,
         object_name: str,
         decode: bool = True,
         make_readable: bool = False
